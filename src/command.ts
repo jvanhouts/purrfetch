@@ -6,7 +6,8 @@
  */
 declare const __IS_DEVELOPMENT__: boolean;
 declare const __PROJECT_ROOT__: string;
+declare const __SITE_URL__: string;
 
 export const COMMAND = __IS_DEVELOPMENT__
-  ? `bun ${__PROJECT_ROOT__}/cli/index.ts`
+  ? `bun ${__PROJECT_ROOT__}/cli/index.ts --site ${__SITE_URL__}`
   : "bunx github:jvanhouts/prettyfetch";

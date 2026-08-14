@@ -40,3 +40,21 @@ export function parsePayload(text: string): Payload | null {
     rows,
   };
 }
+
+/**
+ * Decodes the `#s=<base64url>` fragment the CLI opens the browser with. The
+ * payload rides in the fragment rather than the query string so it never
+ * reaches the server, our logs, or a `Referer` header — it holds the user's
+ * hostname and username.
+ */
+export function parsePayloadFragment(hash: string): Payload | null {
+  const encoded = new URLSearchParams(hash.replace(/^#/, "")).get("s");
+  if (!encoded) return null;
+  try {
+    const binary = atob(encoded.replace(/-/g, "+").replace(/_/g, "/"));
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    return parsePayload(new TextDecoder().decode(bytes));
+  } catch {
+    return null;
+  }
+}

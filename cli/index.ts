@@ -1,9 +1,15 @@
 #!/usr/bin/env bun
 /**
- * prettyfetch — collects the stats the web readout wants and puts them on the
- * clipboard as JSON, ready to paste into https://prettyfetch.pages.dev.
+ * prettyfetch — collects the stats the web readout wants and opens them in
+ * https://prettyfetch.pages.dev. Where there's no browser to open (ssh,
+ * headless, --no-open) it falls back to leaving the JSON on the clipboard.
  *
  * Run it with: bunx github:jvanhouts/prettyfetch
+ *
+ * Flags: --no-open  collect to the clipboard, don't open a browser
+ *        --url      print the link instead of opening it
+ *        --print    print the payload as readable JSON
+ *        --site U   point at a different deployment (also: PRETTYFETCH_SITE)
  */
 
 type Row = { id: string; label: string; value: string };
@@ -199,15 +205,60 @@ function copyToClipboard(text: string): boolean {
   return false;
 }
 
+const SITE = "https://prettyfetch.pages.dev";
+
+function siteUrl(): string {
+  const flag = process.argv.indexOf("--site");
+  const fromFlag = flag === -1 ? "" : process.argv[flag + 1] ?? "";
+  return (fromFlag || process.env.PRETTYFETCH_SITE || SITE).replace(/\/+$/, "");
+}
+
+/** Whether there's a desktop browser here to hand the link to. */
+function hasDesktopBrowser(): boolean {
+  // Over ssh the browser would open on the wrong machine entirely.
+  if (process.env.SSH_TTY || process.env.SSH_CONNECTION) return false;
+  if (process.platform === "linux") {
+    return Boolean(process.env.DISPLAY || process.env.WAYLAND_DISPLAY);
+  }
+  return true;
+}
+
+function openInBrowser(url: string): boolean {
+  const cmd =
+    process.platform === "darwin"
+      ? ["open", url]
+      : process.platform === "win32"
+        ? ["cmd", "/c", "start", "", url]
+        : ["xdg-open", url];
+  try {
+    // No shell involved, so the `#` in the url needs no escaping.
+    return Bun.spawnSync(cmd, { stdout: "ignore", stderr: "ignore" }).success;
+  } catch {
+    return false;
+  }
+}
+
 const payload = collect();
 const json = JSON.stringify(payload);
+const count = payload.rows.length;
+
+// The payload rides in the fragment, which browsers never send to the server —
+// it carries the user's hostname and username.
+const url = `${siteUrl()}/#s=${Buffer.from(json, "utf8").toString("base64url")}`;
+
+const wantsUrl = process.argv.includes("--url");
+const wantsOpen = !wantsUrl && !process.argv.includes("--no-open");
 
 if (process.argv.includes("--print") || process.argv.includes("--stdout")) {
   console.log(JSON.stringify(payload, null, 2));
+} else if (wantsUrl) {
+  console.log(url);
+} else if (wantsOpen && hasDesktopBrowser() && openInBrowser(url)) {
+  console.log(`\n  opening ${count} stats in your browser.\n`);
 } else if (copyToClipboard(json)) {
-  console.log(`\n  copied ${payload.rows.length} stats to your clipboard.`);
-  console.log("  paste them into https://prettyfetch.pages.dev with cmd+v.\n");
+  console.log(`\n  copied ${count} stats to your clipboard.`);
+  console.log(`  paste them into ${siteUrl()} with cmd+v.\n`);
 } else {
-  console.error("  no clipboard tool found — printing instead:\n");
+  console.error("  no browser or clipboard tool found — printing instead:\n");
   console.log(json);
 }

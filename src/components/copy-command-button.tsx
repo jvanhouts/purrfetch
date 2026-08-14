@@ -58,7 +58,7 @@ export function CopyCommandButton() {
   return (
     <button
       aria-label={copied ? "command copied" : "copy stats command"}
-      className="group fixed top-6 left-6 z-10 rounded-lg border border-white/10 bg-ink-900/70 px-3 py-2 text-xs backdrop-blur-md transition-colors hover:border-white/20 hover:bg-ink-800/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan/50"
+      className="group rounded-lg border border-white/10 bg-ink-900/70 px-3 py-2 text-xs backdrop-blur-md transition-colors hover:border-white/20 hover:bg-ink-800/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mint/50"
       onClick={copy}
       type="button"
     >
@@ -76,7 +76,7 @@ export function CopyCommandButton() {
         </span>
         <span
           aria-hidden
-          className={`col-start-1 row-start-1 flex items-center gap-2 text-green transition-all duration-200 ${
+          className={`col-start-1 row-start-1 flex items-center gap-2 text-mint transition-all duration-200 ${
             copied ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0"
           }`}
         >

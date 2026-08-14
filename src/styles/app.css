@@ -14,24 +14,24 @@
   --color-white: #ffffff;
   --color-black: #000000;
 
-  /* Ink — the near-black canvas everything sits on */
-  --color-ink-950: #08090b;
-  --color-ink-900: #0d0f13;
-  --color-ink-800: #14171d;
-  --color-ink-700: #1d222a;
-  --color-ink-600: #2a303a;
+  /* Ink — the near-black canvas everything sits on. Neutral, not blue. */
+  --color-ink-950: #0a0a0c;
+  --color-ink-900: #101115;
+  --color-ink-800: #17181c;
+  --color-ink-700: #1f2126;
+  --color-ink-600: #2a2c32;
 
   /* Type */
-  --color-mist-100: #f2f5f7;
-  --color-mist-300: #c3cbd4;
-  --color-mist-500: #8a95a3;
-  --color-mist-600: #6b7683;
+  --color-mist-100: #f4f7f8;
+  --color-mist-300: #dde3e7;
+  --color-mist-500: #8b939c;
+  --color-mist-600: #6d757e;
 
-  /* Accents, carried over from the original readout */
-  --color-cyan: #5ed3d8;
-  --color-pink: #f08fbe;
-  --color-red: #ff6b6b;
-  --color-green: #7ee08a;
+  /* Accents. Mint carries every "live" thing in the readout — labels, the
+     title, the prompt's cursor, success states — so there is one green, not two. */
+  --color-mint: #4fe0a8;
+  --color-pink: #f072ab;
+  --color-rose: #ec5f88;
 }
 
 html,
@@ -47,5 +47,5 @@ body {
 }
 
 ::selection {
-  background: color-mix(in oklab, var(--color-cyan) 30%, transparent);
+  background: color-mix(in oklab, var(--color-mint) 30%, transparent);
 }
