@@ -1,8 +1,10 @@
 import { Dithering, ImageDithering } from "@paper-design/shaders-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { COMMAND } from "@/command";
+import { CopyCommandButton } from "@/components/copy-command-button";
 import { Field } from "@/components/field";
-
-type Row = { id: string; label: string; value: string };
+import { parsePayload, type Row } from "@/payload";
+import { useClipboardPayload } from "@/use-clipboard-payload";
 
 const INITIAL_ROWS: Row[] = [
   { id: "os", label: "os", value: "macOS 26.5.2 25F84 arm64" },
@@ -29,6 +31,26 @@ export function App() {
   const [user, setUser] = useState("jess");
   const [title, setTitle] = useState("jess@Mac.home");
   const [rows, setRows] = useState(INITIAL_ROWS);
+  const [pasted, setPasted] = useState(false);
+  const clipboard = useClipboardPayload();
+  const armed = clipboard === "ready" && !pasted;
+  const pasteKey = /mac/i.test(navigator.userAgent) ? "⌘V" : "ctrl+V";
+
+  // `bunx github:jvanhouts/prettyfetch` puts a JSON payload on the clipboard;
+  // pasting it anywhere on the page fills in the readout.
+  useEffect(() => {
+    const onPaste = (event: ClipboardEvent) => {
+      const payload = parsePayload(event.clipboardData?.getData("text") ?? "");
+      if (!payload) return;
+      event.preventDefault();
+      if (payload.user) setUser(payload.user);
+      if (payload.title) setTitle(payload.title);
+      setRows(payload.rows);
+      setPasted(true);
+    };
+    window.addEventListener("paste", onPaste);
+    return () => window.removeEventListener("paste", onPaste);
+  }, []);
 
   const update = (id: string, patch: Partial<Row>) => {
     setRows((current) => current.map((row) => (row.id === id ? { ...row, ...patch } : row)));
@@ -47,8 +69,14 @@ export function App() {
         type="4x4"
       />
 
+      <CopyCommandButton />
+
       <div className="mx-auto flex min-h-full max-w-5xl items-center px-6 py-16">
-        <section className="w-full overflow-hidden rounded-2xl border border-white/10 bg-ink-900/80 shadow-[0_40px_120px_-40px_#000] backdrop-blur-xl">
+        <section
+          className={`w-full overflow-hidden rounded-2xl border bg-ink-900/80 shadow-[0_40px_120px_-40px_#000] backdrop-blur-xl transition-colors duration-500 ${
+            armed ? "border-green/40" : "border-white/10"
+          }`}
+        >
           <header className="flex items-center gap-2 border-white/8 border-b bg-white/3 px-4 py-3">
             <span className="size-3 rounded-full bg-[#ff5f57]" />
             <span className="size-3 rounded-full bg-[#febc2e]" />
@@ -57,6 +85,7 @@ export function App() {
               {user} — prettyfetch
             </p>
             <span className="w-14" />
+
           </header>
 
           <div className="p-8 text-[15px] leading-[1.6]">
@@ -127,6 +156,29 @@ export function App() {
                 </div>
               </div>
             </div>
+
+            <p className="mt-10 flex flex-wrap items-center gap-x-2 gap-y-1 break-all text-mist-600 text-xs">
+              {pasted && <span className="text-green">stats pasted — edit anything you like.</span>}
+
+              {!pasted && armed && (
+                <>
+                  {/* Only shown when we could actually read the clipboard. */}
+                  <span className="relative flex size-2">
+                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-green opacity-75" />
+                    <span className="relative inline-flex size-2 rounded-full bg-green" />
+                  </span>
+                  <span className="text-green">
+                    stats on your clipboard — press {pasteKey} to drop them in.
+                  </span>
+                </>
+              )}
+
+              {!pasted && !armed && (
+                <span>
+                  run <span className="text-cyan">{COMMAND}</span> and paste here to fill this in.
+                </span>
+              )}
+            </p>
           </div>
         </section>
       </div>
