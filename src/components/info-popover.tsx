@@ -68,7 +68,7 @@ export function InfoPopover() {
     <div className="relative" ref={root}>
       <button
         aria-expanded={open}
-        aria-label="about prettyfetch"
+        aria-label="about purrfetch"
         className={`rounded-lg border bg-ink-900/70 px-2.5 py-2 backdrop-blur-md transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mint/50 ${
           open
             ? "border-white/20 bg-ink-800/80 text-mist-100"
@@ -83,7 +83,7 @@ export function InfoPopover() {
       {open && (
         <div className="absolute top-full left-0 mt-3 w-[26rem] max-w-[calc(100vw-3rem)] rounded-xl border border-white/10 bg-ink-900/95 p-6 text-xs leading-[1.7] shadow-[0_30px_80px_-30px_#000] backdrop-blur-xl">
           <div className="flex items-start justify-between gap-4">
-            <h2 className="font-medium text-mint tracking-[0.14em]">PRETTYFETCH</h2>
+            <h2 className="font-medium text-mint tracking-[0.14em]">PURRFETCH</h2>
             <button
               aria-label="close"
               className="-mt-0.5 -mr-1 rounded p-1 text-mist-600 transition-colors hover:text-mist-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mint/50"

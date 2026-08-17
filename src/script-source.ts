@@ -1,15 +1,18 @@
 import bundled from "../cli/index.ts?raw";
 
 /**
- * The script `bunx github:jvanhouts/prettyfetch` actually downloads and runs.
+ * The source `npx purrfetch` is built from.
  *
  * It's fetched from GitHub rather than baked in, because a baked-in snapshot is
  * exactly what a paranoid reader can't trust: it would only prove this page
- * ships some text, not that the text is what their shell is about to run. The
+ * ships some text, not that the text is what the package is built from. The
  * bundled copy is the fallback for when the network says no, and the UI labels
  * it as the fallback when it's used.
+ *
+ * Note this is the TypeScript source, not the transpiled `bin/purrfetch.js`
+ * that npm actually serves — readable, and a straight one-to-one build of it.
  */
-export const REPO = "jvanhouts/prettyfetch";
+export const REPO = "jvanhouts/purrfetch";
 export const BRANCH = "main";
 export const SCRIPT_PATH = "cli/index.ts";
 

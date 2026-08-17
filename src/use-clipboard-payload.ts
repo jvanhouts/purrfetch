@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { parsePayload } from "@/payload";
 
 /**
- * Whether the clipboard is holding a prettyfetch payload right now.
+ * Whether the clipboard is holding a purrfetch payload right now.
  *
  * "unknown" is the honest default: reading the clipboard needs the
  * `clipboard-read` permission, and only Chromium lets us ask whether we already

@@ -130,7 +130,7 @@ export function App() {
             <span className="size-3 rounded-full bg-[#febc2e]" />
             <span className="size-3 rounded-full bg-[#28c840]" />
             <p className="flex-1 text-center text-mist-600 text-xs tracking-wide">
-              {user} — prettyfetch
+              {user} — purrfetch
             </p>
             <span className="w-14" />
           </header>
@@ -145,7 +145,7 @@ export function App() {
               />
               <span className="text-rose"> ››› </span>
               <span className="text-mist-600">~/ </span>
-              <span className="text-mint">prettyfetch</span>
+              <span className="text-mint">purrfetch</span>
             </p>
 
             <div className="flex flex-wrap items-start gap-x-14 gap-y-10">

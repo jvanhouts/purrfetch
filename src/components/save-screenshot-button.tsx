@@ -117,7 +117,7 @@ export function SaveScreenshotButton({ cardRef, pageRef }: Props) {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = "prettyfetch.png";
+      link.download = "purrfetch.png";
       link.click();
       URL.revokeObjectURL(url);
 

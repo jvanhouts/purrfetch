@@ -1,19 +1,33 @@
 {
-  "name": "prettyfetch",
+  "name": "purrfetch",
   "version": "0.1.0",
-  "private": true,
+  "description": "A neofetch-style system readout, rendered in your browser instead of the terminal.",
+  "keywords": ["neofetch", "fetch", "system-info", "cli", "sysinfo", "screenshot"],
+  "license": "MIT",
+  "author": "Jess van Houts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jvanhouts/purrfetch.git"
+  },
+  "homepage": "https://purrfetch.jess0x.dev",
+  "bugs": "https://github.com/jvanhouts/purrfetch/issues",
+  "type": "module",
   "bin": {
-    "prettyfetch": "./cli/index.ts"
+    "purrfetch": "./bin/purrfetch.js"
   },
   "files": [
-    "cli"
+    "bin"
   ],
-  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
-    "build": "tsc --noEmit && vite build",
     "dev": "vite dev",
+    "build": "npm run typecheck && vite build && npm run build:cli",
+    "build:cli": "bun build cli/index.ts --target=node --outfile bin/purrfetch.js",
     "serve": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit && tsc -p cli --noEmit",
+    "prepublishOnly": "npm run typecheck && npm run build:cli"
   },
   "devDependencies": {
     "@fontsource-variable/geist-mono": "^5.3.0",
