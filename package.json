@@ -2,7 +2,14 @@
   "name": "purrfetch",
   "version": "0.1.0",
   "description": "A neofetch-style system readout, rendered in your browser instead of the terminal.",
-  "keywords": ["neofetch", "fetch", "system-info", "cli", "sysinfo", "screenshot"],
+  "keywords": [
+    "neofetch",
+    "fetch",
+    "system-info",
+    "cli",
+    "sysinfo",
+    "screenshot"
+  ],
   "license": "MIT",
   "author": "Jess van Houts",
   "repository": {
@@ -27,7 +34,8 @@
     "build:cli": "bun build cli/index.ts --target=node --outfile bin/purrfetch.js",
     "serve": "vite preview",
     "typecheck": "tsc --noEmit && tsc -p cli --noEmit",
-    "prepublishOnly": "npm run typecheck && npm run build:cli"
+    "prepublishOnly": "npm run typecheck && npm run build:cli",
+    "deploy": "npm run build && bunx gh-pages@6.3.0 --dist dist --branch gh-pages --dotfiles --message \"deploy from $(git rev-parse --short HEAD)\""
   },
   "devDependencies": {
     "@fontsource-variable/geist-mono": "^5.3.0",
