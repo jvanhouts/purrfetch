@@ -20,7 +20,7 @@
   "bugs": "https://github.com/jvanhouts/purrfetch/issues",
   "type": "module",
   "bin": {
-    "purrfetch": "./bin/purrfetch.js"
+    "purrfetch": "bin/purrfetch.js"
   },
   "files": [
     "bin"
