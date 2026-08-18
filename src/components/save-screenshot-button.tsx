@@ -72,8 +72,15 @@ export function SaveScreenshotButton({ cardRef, pageRef }: Props) {
 
     setBusy(true);
     try {
+      // The ground behind the shader, read from the theme so a light-mode
+      // screenshot isn't matted onto black.
+      const ground =
+        getComputedStyle(document.documentElement)
+          .getPropertyValue("--color-ink-950")
+          .trim() || "#0a0a0c";
+
       const pageCanvas = await toCanvas(page, {
-        backgroundColor: "#0a0a0c",
+        backgroundColor: ground,
         pixelRatio: SCALE,
         // The buttons are page furniture, not part of the readout.
         filter: (node) => !(node instanceof HTMLElement && node.dataset.screenshotHide !== undefined),
@@ -134,7 +141,7 @@ export function SaveScreenshotButton({ cardRef, pageRef }: Props) {
   return (
     <button
       aria-label={saved ? "screenshot saved" : "save a screenshot"}
-      className="group rounded-lg border border-white/10 bg-ink-900/70 px-3 py-2 text-xs backdrop-blur-md transition-colors hover:border-white/20 hover:bg-ink-800/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mint/50 disabled:opacity-60"
+      className="group rounded-lg border border-veil/10 bg-ink-900/70 px-3 py-2 text-xs backdrop-blur-md transition-colors hover:border-veil/20 hover:bg-ink-800/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-azure/50 disabled:opacity-60"
       disabled={busy}
       onClick={save}
       type="button"
@@ -151,7 +158,7 @@ export function SaveScreenshotButton({ cardRef, pageRef }: Props) {
         </span>
         <span
           aria-hidden
-          className={`col-start-1 row-start-1 flex items-center gap-2 text-mint transition-all duration-200 ${
+          className={`col-start-1 row-start-1 flex items-center gap-2 text-azure-100 transition-all duration-200 ${
             saved ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0"
           }`}
         >

@@ -35,19 +35,39 @@ function useReducedMotion(): boolean {
   return reduced;
 }
 
-export function Backdrop() {
+/** The shader palettes, one per mode — the only colours on the page that can't
+ *  come from a CSS token, since they're uniforms handed to WebGL. */
+const PALETTE = {
+  dark: {
+    back: "#0a0a0c",
+    aurora: ["#101115", "#152744", "#0f1218", "#34202f"],
+    bloom: "#1d3566",
+    rays: ["#5181f9", "#f072ab", "#2a2c32"],
+    ditherFront: "#1f2126",
+  },
+  light: {
+    back: "#eef0f3",
+    aurora: ["#ffffff", "#dde5fb", "#eef0f3", "#f7e2ec"],
+    bloom: "#d3dffb",
+    rays: ["#2f5fd0", "#cf3d8e", "#dcdfe5"],
+    ditherFront: "#d7dbe2",
+  },
+} as const;
+
+export function Backdrop({ mode }: { mode: "light" | "dark" }) {
   const still = useReducedMotion();
+  const palette = PALETTE[mode];
   const shared = `absolute inset-0 h-full w-full ${VIGNETTE}`;
 
   return (
     <div className="-z-10 fixed inset-0 overflow-hidden bg-ink-950">
       {VARIANT === "aurora" && (
-        // Slow bands of ink shot through with the mint and rose the readout
+        // Slow bands of ink shot through with the azure and rose the readout
         // already uses, desaturated almost to black so they only just register.
         <GrainGradient
           className={`${shared} opacity-70`}
-          colorBack="#0a0a0c"
-          colors={["#101115", "#16362f", "#0f1218", "#34202f"]}
+          colorBack={palette.back}
+          colors={[...palette.aurora]}
           intensity={0.28}
           noise={0.4}
           shape="wave"
@@ -62,9 +82,9 @@ export function Backdrop() {
         <GodRays
           bloom={0.35}
           className={`${shared} opacity-55`}
-          colorBack="#0a0a0c"
-          colorBloom="#1c4a3d"
-          colors={["#4fe0a8", "#f072ab", "#2a2c32"]}
+          colorBack={palette.back}
+          colorBloom={palette.bloom}
+          colors={[...palette.rays]}
           density={0.4}
           intensity={0.22}
           offsetX={-0.65}
@@ -78,8 +98,8 @@ export function Backdrop() {
       {VARIANT === "dither" && (
         <Dithering
           className={`${shared} opacity-60`}
-          colorBack="#0a0a0c"
-          colorFront="#1f2126"
+          colorBack={palette.back}
+          colorFront={palette.ditherFront}
           shape="warp"
           size={2}
           speed={still ? 0 : 0.35}
@@ -89,7 +109,7 @@ export function Backdrop() {
       )}
 
       {/* Faint scanlines, so the whole page shares the logo's dithered grain. */}
-      <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(0deg,rgba(255,255,255,0.035)_0px,rgba(255,255,255,0.035)_1px,transparent_1px,transparent_3px)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(0deg,var(--tone-scanline)_0px,var(--tone-scanline)_1px,transparent_1px,transparent_3px)]" />
     </div>
   );
 }

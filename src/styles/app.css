@@ -1,5 +1,6 @@
 @import "tailwindcss" source("../");
 @import "@fontsource-variable/geist-mono";
+@import "@fontsource-variable/figtree";
 
 @theme {
   --font-*: initial;
@@ -8,30 +9,110 @@
   --font-mono:
     "Berkeley Mono", "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
 
+  /* Everything that isn't the terminal window — toolbar, tutorial, modals.
+     The mono is the readout's voice; the chrome around it shouldn't borrow it. */
+  --font-sans:
+    "Figtree Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
   --color-*: initial;
   --color-transparent: transparent;
   --color-current: currentColor;
   --color-white: #ffffff;
   --color-black: #000000;
 
-  /* Ink — the near-black canvas everything sits on. Neutral, not blue. */
-  --color-ink-950: #0a0a0c;
-  --color-ink-900: #101115;
-  --color-ink-800: #17181c;
-  --color-ink-700: #1f2126;
-  --color-ink-600: #2a2c32;
+  /* Every themed colour points at a `--tone-*` variable rather than a literal,
+     and the literals live in the two `:root` blocks below. That indirection is
+     load-bearing: Tailwind folds a literal theme colour straight into the
+     compiled rule (`bg-ink-900/70` becomes a hex), so a mode switch would never
+     reach it — an alias stays a live `var()` the switch can move.
+
+     Veil is the overlay tint: every hairline border and faint surface wash on
+     the page is this colour at some low opacity, so `veil/10` reads the same
+     way against either ground. */
+  --color-veil: var(--tone-veil);
+
+  /* Ink — the canvas everything sits on. Neutral, not blue. */
+  --color-ink-950: var(--tone-ink-950);
+  --color-ink-900: var(--tone-ink-900);
+  --color-ink-800: var(--tone-ink-800);
+  --color-ink-700: var(--tone-ink-700);
+  --color-ink-600: var(--tone-ink-600);
 
   /* Type */
-  --color-mist-100: #f4f7f8;
-  --color-mist-300: #dde3e7;
-  --color-mist-500: #8b939c;
-  --color-mist-600: #6d757e;
+  --color-mist-100: var(--tone-mist-100);
+  --color-mist-300: var(--tone-mist-300);
+  --color-mist-500: var(--tone-mist-500);
+  --color-mist-600: var(--tone-mist-600);
 
-  /* Accents. Mint carries every "live" thing in the readout — labels, the
-     title, the prompt's cursor, success states — so there is one green, not two. */
-  --color-mint: #4fe0a8;
-  --color-pink: #f072ab;
-  --color-rose: #ec5f88;
+  /* Accents. Azure carries every "live" thing in the readout — labels, the
+     title, the prompt's cursor, success states — so there is one blue, not two.
+     It's the blue the icon's ground is painted in, so the artwork and the
+     chrome around it agree. Azure itself is the graphic weight — rings,
+     borders, the tutorial arrow; `azure-100` is the same hue run up to 95%
+     lightness, which is what the readout's type is set in against the dark. */
+  --color-azure: var(--tone-azure);
+  --color-azure-100: var(--tone-azure-100);
+  --color-pink: var(--tone-pink);
+  --color-rose: var(--tone-rose);
+}
+
+/* Dark is the default; light only redefines the same names. Nothing else in
+   the app knows which mode it's in. */
+:root {
+  --tone-veil: #ffffff;
+
+  --tone-ink-950: #0a0a0c;
+  --tone-ink-900: #101115;
+  --tone-ink-800: #17181c;
+  --tone-ink-700: #1f2126;
+  --tone-ink-600: #2a2c32;
+
+  --tone-mist-100: #f4f7f8;
+  --tone-mist-300: #dde3e7;
+  --tone-mist-500: #8b939c;
+  --tone-mist-600: #6d757e;
+
+  --tone-azure: #5181f9;
+  /* hsl(223 93% 85%) — azure's own hue and saturation, at reading weight. */
+  --tone-azure-100: #b3c6fe;
+  --tone-pink: #f072ab;
+  --tone-rose: #ec5f88;
+
+  /* Not utility colours: shadows, the scrim behind modals, the spotlight dim,
+     and the scanline grain. Referenced from arbitrary values and inline styles. */
+  --tone-shadow: #000000;
+  --tone-scrim: rgb(0 0 0 / 0.6);
+  --tone-spotlight: rgb(6 6 9 / 0.82);
+  --tone-scanline: rgb(255 255 255 / 0.035);
+}
+
+:root[data-theme="light"] {
+  --tone-veil: #0b0d12;
+
+  --tone-ink-950: #eef0f3;
+  --tone-ink-900: #ffffff;
+  --tone-ink-800: #f5f6f8;
+  --tone-ink-700: #e9ebef;
+  --tone-ink-600: #dcdfe5;
+
+  --tone-mist-100: #14161a;
+  --tone-mist-300: #33373e;
+  --tone-mist-500: #666d76;
+  --tone-mist-600: #838a93;
+
+  /* The accents keep their hue but drop enough lightness to stay legible on
+     white — the dark-mode azure washes out against it. */
+  --tone-azure: #2f5fd0;
+  /* No room to run light here — on white the type has to go the other way,
+     so the text tone and the graphic tone land in the same place. */
+  --tone-azure-100: #2f5fd0;
+  --tone-pink: #cf3d8e;
+  --tone-rose: #cc3a62;
+
+  --tone-shadow: rgb(38 44 58 / 0.28);
+  --tone-scrim: rgb(30 34 44 / 0.35);
+  --tone-spotlight: rgb(226 230 236 / 0.86);
+  --tone-scanline: rgb(11 13 18 / 0.03);
 }
 
 html,
@@ -41,11 +122,88 @@ body,
 }
 
 body {
+  font-family: var(--font-sans);
   background: var(--color-ink-950);
   color: var(--color-mist-300);
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: color-mix(in oklab, var(--color-mint) 30%, transparent);
+  background: color-mix(in oklab, var(--color-azure) 30%, transparent);
+}
+
+/* The info button has to be found before anything else on the page makes
+   sense, so it flashes a few times on load and then stops asking. */
+@keyframes info-flash {
+  0%,
+  100% {
+    border-color: color-mix(in oklab, var(--color-veil) 10%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-azure) 40%, transparent);
+  }
+  50% {
+    border-color: color-mix(in oklab, var(--color-azure) 70%, transparent);
+    box-shadow: 0 0 0 7px color-mix(in oklab, var(--color-azure) 0%, transparent);
+  }
+}
+
+.animate-info-flash {
+  animation: info-flash 1.3s ease-in-out 3;
+}
+
+/* First-visit spotlight and tutorial ring: the same idea at two sizes. */
+@keyframes spot-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+
+.animate-spot-breathe {
+  animation: spot-breathe 2.4s ease-in-out infinite;
+}
+
+@keyframes tutorial-ring {
+  0%,
+  100% {
+    border-color: color-mix(in oklab, var(--color-azure) 40%, transparent);
+  }
+  50% {
+    border-color: color-mix(in oklab, var(--color-azure) 90%, transparent);
+  }
+}
+
+.animate-tutorial-ring {
+  animation: tutorial-ring 2s ease-in-out infinite;
+}
+
+/* Step two is the one step that asks you to leave the page, so the line nudges
+   and brightens toward azure instead of sitting there being read. */
+@keyframes step-nudge {
+  0%,
+  100% {
+    color: var(--color-mist-100);
+    transform: translateY(0);
+  }
+  50% {
+    color: var(--color-azure-100);
+    transform: translateY(-2px);
+  }
+}
+
+.animate-step-nudge {
+  animation: step-nudge 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-info-flash,
+  .animate-step-nudge,
+  .animate-spot-breathe,
+  .animate-tutorial-ring {
+    animation: none;
+  }
 }

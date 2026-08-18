@@ -81,7 +81,7 @@ export function CopyCommandButton() {
     <div className="group/copy relative">
       <button
         aria-label={copied ? "command copied" : "copy stats command"}
-        className="group rounded-lg border border-white/10 bg-ink-900/70 px-3 py-2 text-xs backdrop-blur-md transition-colors hover:border-white/20 hover:bg-ink-800/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mint/50"
+        className="group rounded-lg border border-veil/10 bg-ink-900/70 px-3 py-2 text-xs backdrop-blur-md transition-colors hover:border-veil/20 hover:bg-ink-800/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-azure/50"
         onClick={copy}
         type="button"
       >
@@ -99,7 +99,7 @@ export function CopyCommandButton() {
           </span>
           <span
             aria-hidden
-            className={`col-start-1 row-start-1 flex items-center gap-2 text-mint transition-all duration-200 ${
+            className={`col-start-1 row-start-1 flex items-center gap-2 text-azure-100 transition-all duration-200 ${
               copied ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0"
             }`}
           >
@@ -113,7 +113,7 @@ export function CopyCommandButton() {
           padding keeps the hover path from the button to it unbroken. */}
       <div className="absolute top-full left-0 pt-2">
         <button
-          className={`flex items-center gap-1.5 rounded-lg border border-white/10 bg-ink-900/70 px-2.5 py-1.5 text-[11px] text-mist-500 backdrop-blur-md transition-all duration-200 hover:border-white/20 hover:bg-ink-800/80 hover:text-mist-100 focus-visible:pointer-events-auto focus-visible:translate-y-0 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mint/50 group-hover/copy:pointer-events-auto group-hover/copy:translate-y-0 group-hover/copy:opacity-100 ${
+          className={`flex items-center gap-1.5 rounded-lg border border-veil/10 bg-ink-900/70 px-2.5 py-1.5 text-[11px] text-mist-500 backdrop-blur-md transition-all duration-200 hover:border-veil/20 hover:bg-ink-800/80 hover:text-mist-100 focus-visible:pointer-events-auto focus-visible:translate-y-0 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-azure/50 group-hover/copy:pointer-events-auto group-hover/copy:translate-y-0 group-hover/copy:opacity-100 ${
             showing
               ? "pointer-events-auto translate-y-0 opacity-100"
               : "pointer-events-none -translate-y-1 opacity-0"

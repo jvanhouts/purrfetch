@@ -4,7 +4,9 @@ import { Backdrop, CAPTURABLE } from "@/components/backdrop";
 import { CopyCommandButton } from "@/components/copy-command-button";
 import { Field } from "@/components/field";
 import { SaveScreenshotButton } from "@/components/save-screenshot-button";
-import { InfoPopover } from "@/components/info-popover";
+import { SettingsButton } from "@/components/settings-button";
+import { InfoButton } from "@/components/info-button";
+import { Tutorial } from "@/components/tutorial";
 import {
   parsePayload,
   parsePayloadFragment,
@@ -12,6 +14,7 @@ import {
   type Row,
 } from "@/payload";
 import { useClipboardPayload } from "@/use-clipboard-payload";
+import { useTheme } from "@/use-theme";
 
 const INITIAL_ROWS: Row[] = [
   { id: "os", label: "os", value: "macOS 26.5.2 25F84 arm64" },
@@ -35,24 +38,24 @@ const INITIAL_ROWS: Row[] = [
 
 const SWATCHES = [
   [
-    "#4c5168",
-    "#e05561",
-    "#8cc265",
-    "#d5a44b",
-    "#4d8bf5",
-    "#e57fd0",
-    "#48a3ad",
-    "#a7b0bd",
+    "#5f647d",
+    "#f06a92",
+    "#91d7a3",
+    "#e6bd68",
+    "#63a5f5",
+    "#d982d2",
+    "#56c7c2",
+    "#d7dbe4",
   ],
   [
-    "#6b7189",
-    "#ff7a85",
-    "#a8dd84",
-    "#f0c46a",
-    "#74a5ff",
-    "#f7a4e2",
-    "#6cc7d1",
-    "#d6dce4",
+    "#777d99",
+    "#ff7c9f",
+    "#a8e6b5",
+    "#f2cd78",
+    "#7bb5ff",
+    "#eb98df",
+    "#72d8d2",
+    "#f0f1f5",
   ],
 ];
 
@@ -62,8 +65,11 @@ export function App() {
   const [rows, setRows] = useState(INITIAL_ROWS);
   const pageRef = useRef<HTMLElement>(null);
   const cardRef = useRef<HTMLElement>(null);
+  const copyRef = useRef<HTMLDivElement>(null);
+  const [tutorial, setTutorial] = useState(false);
   const [filled, setFilled] = useState(false);
   const clipboard = useClipboardPayload();
+  const { theme, setTheme, mode } = useTheme();
   const armed = clipboard === "ready" && !filled;
 
   const apply = useCallback((payload: Payload) => {
@@ -108,24 +114,32 @@ export function App() {
   };
 
   return (
-    <main className="relative isolate flex min-h-dvh items-center justify-center font-mono" ref={pageRef}>
+    <main className="relative isolate flex min-h-dvh items-center justify-center font-sans" ref={pageRef}>
       {/* The only thing on the page that moves. */}
-      <Backdrop />
+      <Backdrop mode={mode} />
 
-      <div className="fixed top-6 left-6 z-10 flex items-start gap-2" data-screenshot-hide>
-        <CopyCommandButton />
+      <div className="fixed top-6 left-6 z-30 flex items-start gap-2" data-screenshot-hide>
+        <SettingsButton onTheme={setTheme} theme={theme} />
+        <div ref={copyRef}>
+          <CopyCommandButton />
+        </div>
         <SaveScreenshotButton cardRef={cardRef} pageRef={pageRef} />
-        <InfoPopover />
       </div>
+
+      <InfoButton busy={tutorial} onStart={() => setTutorial(true)} />
+
+      {tutorial && (
+        <Tutorial copyRef={copyRef} onClose={() => setTutorial(false)} />
+      )}
 
       <div className="w-full max-w-5xl px-6 py-16">
         <section
           ref={cardRef}
-          className={`w-full overflow-hidden rounded-2xl border bg-ink-900/80 shadow-[0_40px_120px_-40px_#000] backdrop-blur-xl transition-colors duration-500 ${
-            armed ? "border-mint/40" : "border-white/10"
+          className={`w-full overflow-hidden rounded-2xl border bg-ink-900/80 font-mono shadow-[0_40px_120px_-40px_var(--tone-shadow)] backdrop-blur-xl transition-colors duration-500 ${
+            armed ? "border-azure/40" : "border-veil/10"
           }`}
         >
-          <header className="flex items-center gap-2 border-white/8 border-b bg-white/3 px-4 py-3">
+          <header className="flex items-center gap-2 border-veil/8 border-b bg-veil/3 px-4 py-3">
             <span className="size-3 rounded-full bg-[#ff5f57]" />
             <span className="size-3 rounded-full bg-[#febc2e]" />
             <span className="size-3 rounded-full bg-[#28c840]" />
@@ -145,15 +159,15 @@ export function App() {
               />
               <span className="text-rose"> ››› </span>
               <span className="text-mist-600">~/ </span>
-              <span className="text-mint">purrfetch</span>
+              <span className="text-azure-100">purrfetch</span>
             </p>
 
             <div className="flex flex-wrap items-start gap-x-14 gap-y-10">
               {/* The logo, run through the same dither the background uses. */}
               <ImageDithering
-                className="size-80 shrink-0"
+                className="size-60 shrink-0 rounded-3xl"
                 colorBack="#00000000"
-                image="/logo.png"
+                image="/icon.png"
                 originalColors
                 size={2}
                 speed={0}
@@ -163,26 +177,25 @@ export function App() {
 
               <div className="min-w-0">
                 <p className="font-medium">
-                  <span>🐱: </span>
                   <Field
                     ariaLabel="title"
-                    className="text-mint"
+                    className="text-azure-100"
                     onChange={setTitle}
                     value={title}
                   />
                 </p>
-                <div className="my-2 h-px w-full bg-white/10" />
+                <div className="my-2 h-px w-full bg-veil/10" />
 
                 <div className="space-y-0.5">
                   {rows.map((row) => (
                     <p key={row.id}>
                       <Field
                         ariaLabel={`${row.label} label`}
-                        className="font-medium text-mint"
+                        className="font-medium text-azure-100"
                         onChange={(label) => update(row.id, { label })}
                         value={row.label}
                       />
-                      <span className="font-medium text-mint">:</span>{" "}
+                      <span className="font-medium text-azure-100">:</span>{" "}
                       <Field
                         ariaLabel={`${row.label} value`}
                         className="text-mist-300"

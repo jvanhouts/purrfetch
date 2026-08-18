@@ -8,6 +8,24 @@
     <meta name="description" content="A neofetch-style readout you fill in yourself." />
   </head>
   <body>
+    <script>
+      // Runs before first paint so the page never flashes the wrong mode.
+      // Mirrors the resolution in src/use-theme.ts.
+      (() => {
+        let stored = null;
+        try {
+          stored = localStorage.getItem("purrfetch:theme");
+        } catch {}
+        const mode =
+          stored === "light" || stored === "dark"
+            ? stored
+            : matchMedia("(prefers-color-scheme: light)").matches
+              ? "light"
+              : "dark";
+        document.documentElement.dataset.theme = mode;
+        document.documentElement.style.colorScheme = mode;
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

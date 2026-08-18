@@ -38,6 +38,7 @@
     "deploy": "npm run build && bunx gh-pages@6.3.0 --dist dist --branch gh-pages --dotfiles --message \"deploy from $(git rev-parse --short HEAD)\""
   },
   "devDependencies": {
+    "@fontsource-variable/figtree": "^5.3.0",
     "@fontsource-variable/geist-mono": "^5.3.0",
     "@paper-design/shaders-react": "^0.0.80",
     "@tailwindcss/vite": "^4.2.1",

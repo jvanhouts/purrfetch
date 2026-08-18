@@ -99,10 +99,10 @@ function CopyButton({ label, text }: { label: string; text: () => string }) {
 
   return (
     <button
-      className={`flex shrink-0 items-center gap-2 rounded-md border px-2.5 py-1.5 text-[11px] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mint/50 ${
+      className={`flex shrink-0 items-center gap-2 rounded-md border px-2.5 py-1.5 text-[11px] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-azure/50 ${
         copied
-          ? "border-mint/40 text-mint"
-          : "border-white/10 text-mist-500 hover:border-white/20 hover:text-mist-100"
+          ? "border-azure/40 text-azure-100"
+          : "border-veil/10 text-mist-500 hover:border-veil/20 hover:text-mist-100"
       }`}
       onClick={copy}
       type="button"
@@ -146,14 +146,14 @@ export function ParanoidModal({ onClose }: Props) {
   return (
     /* Clicking the backdrop closes; Escape does the same from the keyboard. */
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 p-6 backdrop-blur-sm sm:p-10"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-[var(--tone-scrim)] p-6 backdrop-blur-sm sm:p-10"
       data-screenshot-hide
       onClick={onClose}
     >
       <div
         aria-label="what the stats command runs"
         aria-modal
-        className="my-auto w-full max-w-3xl rounded-xl border border-white/10 bg-ink-900/95 shadow-[0_40px_120px_-30px_#000] focus:outline-none"
+        className="my-auto w-full max-w-3xl rounded-xl border border-veil/10 bg-ink-900/95 shadow-[0_40px_120px_-30px_var(--tone-shadow)] focus:outline-none"
         onClick={(event) => event.stopPropagation()}
         ref={panel}
         role="dialog"
@@ -161,9 +161,7 @@ export function ParanoidModal({ onClose }: Props) {
       >
         <div className="flex items-start justify-between gap-4 px-6 pt-6">
           <div>
-            <h2 className="font-medium text-mint text-xs tracking-[0.14em]">
-              WHAT IT ACTUALLY RUNS
-            </h2>
+            <h2 className="font-medium text-azure-100 text-xs">what it actually runs</h2>
             <p className="mt-3 text-mist-300 text-xs leading-[1.7]">
               It reads your machine's stats, opens this page with them in the URL
               fragment, and exits. Nothing is uploaded — the fragment never leaves
@@ -172,7 +170,7 @@ export function ParanoidModal({ onClose }: Props) {
           </div>
           <button
             aria-label="close"
-            className="-mt-1 -mr-1 rounded p-1 text-mist-600 transition-colors hover:text-mist-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mint/50"
+            className="-mt-1 -mr-1 rounded p-1 text-mist-600 transition-colors hover:text-mist-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-azure/50"
             onClick={onClose}
             type="button"
           >
@@ -181,7 +179,7 @@ export function ParanoidModal({ onClose }: Props) {
         </div>
 
         <div className="mt-5 flex items-center gap-3 px-6">
-          <code className="min-w-0 flex-1 overflow-x-auto rounded-lg border border-white/10 bg-ink-950/80 px-3 py-2 text-[13px] text-mist-100 whitespace-pre">
+          <code className="min-w-0 flex-1 overflow-x-auto rounded-lg border border-veil/10 bg-ink-950/80 px-3 py-2 text-[13px] text-mist-100 whitespace-pre">
             {COMMAND}
           </code>
           <CopyButton label="copy command" text={() => COMMAND} />
@@ -196,7 +194,7 @@ export function ParanoidModal({ onClose }: Props) {
                 : `${SCRIPT_PATH} · ${lines} lines · GitHub unreachable, showing the copy bundled with this page · verify at `}
             {source !== null && (
               <a
-                className="text-mist-500 underline decoration-white/20 underline-offset-2 transition-colors hover:text-mint"
+                className="text-mist-500 underline decoration-veil/20 underline-offset-2 transition-colors hover:text-azure-100"
                 href={source.origin === "github" ? SCRIPT_RAW_URL : SCRIPT_BLOB_URL}
                 rel="noreferrer"
                 target="_blank"
@@ -214,7 +212,7 @@ export function ParanoidModal({ onClose }: Props) {
             className="overflow-y-auto overscroll-contain px-6"
             style={{ maxHeight: expanded ? "60vh" : COLLAPSED }}
           >
-            <pre className="pb-6 text-[12px] leading-[1.65] text-mist-500 selection:bg-mint/30">
+            <pre className="pb-6 text-[12px] leading-[1.65] text-mist-500 selection:bg-azure/30">
               {source === null ? "  loading…" : source.text}
             </pre>
           </div>
@@ -231,7 +229,7 @@ export function ParanoidModal({ onClose }: Props) {
         <button
           aria-expanded={expanded}
           aria-label={expanded ? "collapse the script" : "expand the script"}
-          className="group flex w-full items-center justify-center border-white/10 border-t py-3 text-mist-600 transition-colors hover:bg-white/3 hover:text-mist-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-mint/50"
+          className="group flex w-full items-center justify-center border-veil/10 border-t py-3 text-mist-600 transition-colors hover:bg-veil/3 hover:text-mist-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-azure/50"
           onClick={() => setExpanded((current) => !current)}
           type="button"
         >

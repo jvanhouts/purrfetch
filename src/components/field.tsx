@@ -13,7 +13,7 @@ export function Field({
   return (
     <input
       aria-label={ariaLabel}
-      className={`w-auto rounded-md bg-transparent px-1 outline-none transition-colors hover:bg-white/6 focus:bg-white/10 focus:ring-1 focus:ring-mint/40 ${className ?? ""}`}
+      className={`w-auto rounded-md bg-transparent px-1 outline-none transition-colors hover:bg-veil/6 focus:bg-veil/10 focus:ring-1 focus:ring-azure/40 ${className ?? ""}`}
       onChange={(event) => onChange(event.target.value)}
       size={Math.max(value.length, 1)}
       spellCheck={false}
