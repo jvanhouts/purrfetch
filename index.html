@@ -6,10 +6,28 @@
     <link rel="icon" href="/logo.png" />
     <title>purrfetch — your own neofetch</title>
     <meta name="description" content="A neofetch-style readout you fill in yourself." />
-    <script type="module" crossorigin src="/assets/index-CgI38-Om.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-MsIZR61f.css">
+    <script type="module" crossorigin src="/assets/index-Cc7CjLjS.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-aDQwjW0-.css">
   </head>
   <body>
+    <script>
+      // Runs before first paint so the page never flashes the wrong mode.
+      // Mirrors the resolution in src/use-theme.ts.
+      (() => {
+        let stored = null;
+        try {
+          stored = localStorage.getItem("purrfetch:theme");
+        } catch {}
+        const mode =
+          stored === "light" || stored === "dark"
+            ? stored
+            : matchMedia("(prefers-color-scheme: light)").matches
+              ? "light"
+              : "dark";
+        document.documentElement.dataset.theme = mode;
+        document.documentElement.style.colorScheme = mode;
+      })();
+    </script>
     <div id="root"></div>
   </body>
 </html>
